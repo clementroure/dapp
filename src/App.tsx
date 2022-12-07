@@ -29,6 +29,14 @@ import {
 } from "wagmi";
 import { publicProvider } from 'wagmi/providers/public';
 import Main from "./pages/main";
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Error404 from "./pages/Error404";
+import ErrorChain from "./pages/ErrorChain";
+import FakeMeebits from "./pages/FakeMeebits";
+import FakeNefturians from "./pages/FakeNefturians";
+import FakeBayc from "./pages/FakeBayc";
+import ChainInfo from "./pages/ChainID";
+import ChainID from "./pages/ChainID";
 
 const { chains, provider } = configureChains(
   [chain.sepolia],
@@ -68,11 +76,26 @@ const wagmiClient = createClient({
 
 export default function App() {
 
+  const [tokenId_Bayc, setTokenId_Bayc] = useState("");
+
+  window.addEventListener('tokenId_Bayc_Event', (e:any) => {
+    setTokenId_Bayc(e.detail.tokenId);
+  });
 
   return (
     <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider chains={chains} theme={lightTheme()}>
-          <Main/>
+          <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Main />}/>
+                <Route path="/chain-info" element={<ChainID />}/>
+                <Route path="/error-chain" element={<ErrorChain />}/>
+                <Route path= {`/fakeBayc/${tokenId_Bayc}`} element={<FakeBayc />}/>
+                <Route path="/fakeNefturians" element={<FakeNefturians />}/>
+                <Route path="/fakeMeebits" element={<FakeMeebits />}/>
+                <Route path="*" element={<Error404 />}/>
+              </Routes>
+          </BrowserRouter>
         </RainbowKitProvider>
     </WagmiConfig>
   );
