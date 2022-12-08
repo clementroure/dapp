@@ -34,7 +34,7 @@ function ChainID () {
         }
 
         init()
-    })
+    },[])
 
     // Detect chain changes
     // @ts-ignore
